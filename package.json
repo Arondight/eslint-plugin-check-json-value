@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-check-json-value",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ESLint plugin to check value of JSON file",
   "keywords": [
     "eslint",
@@ -9,6 +9,13 @@
     "eslint-plugin-check-json-value"
   ],
   "author": "Qin Fandong",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arondight/eslint-plugin-check-json-value.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Arondight/eslint-plugin-check-json-value/issues"
+  },
   "main": "lib/index.js",
   "scripts": {
     "check": "npx eslint ./.*.json ./lib/",
