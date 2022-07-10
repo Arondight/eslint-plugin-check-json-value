@@ -1,6 +1,6 @@
 # eslint-plugin-check-json-value
 
-ESLint plugin to check value of JSON file
+ESLint plugin to check value of JSON file.
 
 ## Installation
 
@@ -31,7 +31,14 @@ Then configure the rules you want to use under the rules section.
 ```json
 {
   "rules": {
-    "check-json-value/rule-name": 2
+    "check-json-value/json-value": [
+      "error",
+      {
+        "file": "data/record-202[1-2]\\.json",
+        "path": "data.records[0].id",
+        "values": ["^\\d{4,6}$", "^null$"]
+      }
+    ]
   }
 }
 ```

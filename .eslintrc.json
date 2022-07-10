@@ -7,11 +7,12 @@
   "parserOptions": {
     "ecmaVersion": 2017
   },
-  "extends": ["eslint:recommended", "plugin:eslint-plugin/recommended", "plugin:node/recommended"],
-  "overrides": [
-    {
-      "files": ["tests/**/*.js"],
-      "env": { "mocha": true }
-    }
-  ]
+  "extends": [
+    "eslint:recommended",
+    "plugin:eslint-plugin/recommended",
+    "plugin:node/recommended",
+    "plugin:json/recommended"
+  ],
+  "overrides": [],
+  "ignorePatterns": ["!.eslintrc.json", "!.prettierrc.json"]
 }
