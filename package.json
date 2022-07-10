@@ -5,7 +5,8 @@
   "keywords": [
     "eslint",
     "eslintplugin",
-    "eslint-plugin"
+    "eslint-plugin",
+    "eslint-plugin-check-json-value"
   ],
   "author": "Qin Fandong",
   "main": "lib/index.js",
