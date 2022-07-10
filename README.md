@@ -22,25 +22,20 @@ Add `check-json-value` to the plugins section of your `.eslintrc` configuration 
 
 ```json
 {
-    "plugins": [
-        "check-json-value"
-    ]
+  "plugins": ["check-json-value"]
 }
 ```
-
 
 Then configure the rules you want to use under the rules section.
 
 ```json
 {
-    "rules": {
-        "check-json-value/rule-name": 2
-    }
+  "rules": {
+    "check-json-value/rule-name": 2
+  }
 }
 ```
 
 ## Supported Rules
 
-* Fill in provided rules here
-
-
+- Fill in provided rules here
