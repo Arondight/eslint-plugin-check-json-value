@@ -1,0 +1,21 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "data.records[0].id",
+          "values": ["^\\d{4,6}$"],
+          "if": [
+            {
+              "path": "data.name",
+              "values": ["^Mr\\.s\\Cat$"]
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}

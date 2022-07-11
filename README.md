@@ -36,14 +36,25 @@ Then configure the rules you want to use under the rules section.
       {
         "lint": true
       }
-    ]
+    ],
     "check-json-value/json-value": [
       "error",
       [
         {
-          "file": "data/record-202[1-2]\\.json",
-          "path": "data.records[0].id",
+          "file": "data/record-202[12]\\.json",
+          "path": "records[0].id",
           "values": ["^\\d{4,6}$", "^null$"]
+        },
+        {
+          "file": "members\\.json",
+          "path": "name",
+          "values": ["^Mr\\.\\s\\w+$"],
+          "if": [
+            {
+              "path": "gender",
+              "values": ["^male$"]
+            }
+          ]
         }
       ]
     ]
