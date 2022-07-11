@@ -39,11 +39,13 @@ Then configure the rules you want to use under the rules section.
     ]
     "check-json-value/json-value": [
       "error",
-      {
-        "file": "data/record-202[1-2]\\.json",
-        "path": "data.records[0].id",
-        "values": ["^\\d{4,6}$", "^null$"]
-      }
+      [
+        {
+          "file": "data/record-202[1-2]\\.json",
+          "path": "data.records[0].id",
+          "values": ["^\\d{4,6}$", "^null$"]
+        }
+      ]
     ]
   }
 }
