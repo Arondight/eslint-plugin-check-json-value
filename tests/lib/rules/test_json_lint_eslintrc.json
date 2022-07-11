@@ -1,0 +1,11 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-lint": [
+      "error",
+      {
+        "lint": true
+      }
+    ]
+  }
+}

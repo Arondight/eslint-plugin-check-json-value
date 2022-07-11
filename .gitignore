@@ -48,6 +48,8 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+# But unit test dependency
+!tests/lib/rules/node_modules
 
 # TypeScript v1 declaration files
 typings/

@@ -1,0 +1,15 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "not exists",
+          "values": [""]
+        }
+      ]
+    ]
+  }
+}

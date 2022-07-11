@@ -34,7 +34,7 @@ Then configure the rules you want to use under the rules section.
     "check-json-value/json-lint": [
       "error",
       {
-        "lint": true,
+        "lint": true
       }
     ]
     "check-json-value/json-value": [
