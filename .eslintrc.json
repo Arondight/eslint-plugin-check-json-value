@@ -9,10 +9,14 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:eslint-plugin/recommended",
     "plugin:node/recommended",
     "plugin:json/recommended"
   ],
-  "overrides": [],
+  "overrides": [
+    {
+      "files": ["lib/rules/*.js"],
+      "extends": ["plugin:eslint-plugin/rules-recommended"]
+    }
+  ],
   "ignorePatterns": ["!.eslintrc.json", "!.prettierrc.json"]
 }
