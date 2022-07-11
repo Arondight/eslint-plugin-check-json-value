@@ -7,13 +7,13 @@ ESLint plugin to check value of JSON file.
 You'll first need to install [ESLint](https://eslint.org/).
 
 ```sh
-npm i eslint --save-dev
+npm install --save-dev eslint
 ```
 
 Next, install `eslint-plugin-check-json-value`.
 
 ```sh
-npm install eslint-plugin-check-json-value --save-dev
+npm install --save-dev eslint-plugin-check-json-value
 ```
 
 ## Usage
@@ -53,4 +53,4 @@ Then configure the rules you want to use under the rules section.
 
 ## LICENSE
 
-[MIT License](LICENSE).
+[MIT License](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/LICENSE).

@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-check-json-value",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "ESLint plugin to check value of JSON file",
   "keywords": [
     "eslint",
@@ -18,8 +18,8 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "check": "npx eslint ./.*.json ./lib/ ./tests/lib/rules/*.js",
-    "format": "npx prettier --config ./.prettierrc.json -uw ./.*.json ./*.md ./lib/ ./tests/lib/rules/*.js",
+    "check": "npx eslint ./.*.json ./lib/ ./tests/*.js ./tests/lib/rules/*.js",
+    "format": "npx prettier --config ./.prettierrc.json -uw ./.*.json ./*.md ./lib/ ./tests/*.js ./tests/lib/rules/*.js",
     "test": "npx mocha ./tests/lib/rules/"
   },
   "dependencies": {

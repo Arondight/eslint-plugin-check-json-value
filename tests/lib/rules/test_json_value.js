@@ -15,9 +15,8 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [];
 
-    it("should get nothing with empty value", () => {
-      assert.deepEqual(expect, result[0].messages);
-    });
+    it("should get nothing with empty value", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 
   describe("path not exists", () => {
@@ -36,9 +35,8 @@ describe("json-value", () => {
       },
     ];
 
-    it("should get error if path not exists", () => {
-      assert.deepEqual(expect, result[0].messages);
-    });
+    it("should get error if path not exists", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 
   describe("match valid value", () => {
@@ -49,9 +47,8 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [];
 
-    it("should get nothing with valid value", () => {
-      assert.deepEqual(expect, result[0].messages);
-    });
+    it("should get nothing with valid value", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 
   describe("match invalid value", () => {
@@ -71,9 +68,8 @@ describe("json-value", () => {
       },
     ];
 
-    it("should get error with invalid value", () => {
-      assert.deepEqual(expect, result[0].messages);
-    });
+    it("should get error with invalid value", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 
   describe("match null value", () => {
@@ -81,8 +77,7 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [];
 
-    it("should get nothing with null value", () => {
-      assert.deepEqual(expect, result[0].messages);
-    });
+    it("should get nothing with null value", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 });
