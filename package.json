@@ -22,11 +22,12 @@
     "format": "npx prettier --config ./.prettierrc.json -uw ./.*.json ./*.md ./lib/"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "vscode-json-languageservice": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^8.19.0",
-    "eslint-plugin-eslint-plugin": "^4.4.0",
+    "eslint-plugin-eslint-plugin": "^4.4.1",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "prettier": "^2.7.1"

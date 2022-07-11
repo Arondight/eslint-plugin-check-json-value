@@ -31,6 +31,12 @@ Then configure the rules you want to use under the rules section.
 ```json
 {
   "rules": {
+    "check-json-value/json-lint": [
+      "error",
+      {
+        "lint": true,
+      }
+    ]
     "check-json-value/json-value": [
       "error",
       {
