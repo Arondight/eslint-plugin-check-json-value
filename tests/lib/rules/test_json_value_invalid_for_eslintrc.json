@@ -1,0 +1,29 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "data.records[COUNTER1].values[COUNTER2]",
+          "values": ["^\\d+$"],
+          "for": [
+            {
+              "replace": "COUNTER1",
+              "start": 0,
+              "end": 4,
+              "step": 1
+            },
+            {
+              "replace": "COUNTER2",
+              "start": 0,
+              "end": 3,
+              "step": 1
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}

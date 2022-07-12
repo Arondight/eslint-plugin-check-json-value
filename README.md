@@ -41,18 +41,36 @@ Then configure the rules you want to use under the rules section.
       "error",
       [
         {
-          "file": "data/record-202[12]\\.json",
-          "path": "records[0].id",
-          "values": ["^\\d{4,6}$", "^null$"]
+          "file": "member-.+\\.json",
+          "path": "gender",
+          "values": ["^(fe)?males$"]
         },
         {
-          "file": "members\\.json",
-          "path": "name",
-          "values": ["^Mr\\.\\s\\w+$"],
+          "file": "data/record-201[0-9]\\.json",
+          "path": "records[COUNTER1].items[COUNTER2]",
+          "values": ["^\\d{4,6}$"],
           "if": [
             {
-              "path": "gender",
-              "values": ["^male$"]
+              "path": "status",
+              "values": ["^NEED CONFIRM$"]
+            },
+            {
+              "path": "complete",
+              "values": ["^true$"]
+            }
+          ],
+          "for": [
+            {
+              "replace": "COUNTER1",
+              "start": 1,
+              "end": 10,
+              "step": 1
+            },
+            {
+              "replace": "COUNTER2",
+              "start": 5,
+              "end": 11,
+              "step": 5
             }
           ]
         }

@@ -4,16 +4,20 @@
     "age": 100,
     "records": [
       {
-        "id": 10000
+        "id": 10000,
+        "values": [50, 50, 50]
       },
       {
-        "id": null
+        "id": null,
+        "values": []
       },
       {
-        "id": ""
+        "id": "",
+        "values": [null, "wrong"]
       },
       {
-        "id": "10001"
+        "id": "10001",
+        "values": [51, 51, 51]
       }
     ]
   }

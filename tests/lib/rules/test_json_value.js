@@ -167,4 +167,61 @@ describe("json-value", () => {
     it("should get nothing with false conditions", () =>
       assert.deepEqual(expect, result[0].messages));
   });
+
+  describe("not match valid value with for", () => {
+    const config = path.resolve(
+      rulesDir,
+      "test_json_value_invalid_for_eslintrc.json"
+    );
+    const result = runner(config, json);
+    const expect = [
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[1].values[0]" is not exists',
+        column: null,
+        nodeType: null,
+      },
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[1].values[1]" is not exists',
+        column: null,
+        nodeType: null,
+      },
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[1].values[2]" is not exists',
+        column: null,
+        nodeType: null,
+      },
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message:
+          'path "data.records[2].values[0]" doesn\'t match any of "^\\d+$"',
+        column: null,
+        nodeType: null,
+      },
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message:
+          'path "data.records[2].values[1]" doesn\'t match any of "^\\d+$"',
+        column: null,
+        nodeType: null,
+      },
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[2].values[2]" is not exists',
+        column: null,
+        nodeType: null,
+      },
+    ];
+
+    it("should get error when not match valid value with for", () =>
+      assert.deepEqual(expect, result[0].messages));
+  });
 });
