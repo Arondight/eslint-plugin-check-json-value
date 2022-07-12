@@ -12,7 +12,7 @@ module.exports = function (config, ...rest) {
   let result = {};
 
   try {
-    result = JSON.parse(new String(process.stdout));
+    result = JSON.parse(String(process.stdout));
   } catch (e) {
     // do nothing
   }
