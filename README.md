@@ -10,7 +10,7 @@ You'll first need to install [ESLint](https://eslint.org/).
 npm install --save-dev eslint
 ```
 
-Next, install `eslint-plugin-check-json-value`.
+Next, install [eslint-plugin-check-json-value](https://www.npmjs.com/package/eslint-plugin-check-json-value).
 
 ```sh
 npm install --save-dev eslint-plugin-check-json-value
@@ -52,7 +52,7 @@ Then configure the rules you want to use under the rules section.
           "if": [
             {
               "path": "status",
-              "values": ["^NEED CONFIRM$"]
+              "values": ["^NEED CONFIRM$", "^UNCONFIRMED$"]
             },
             {
               "path": "complete",
@@ -62,15 +62,15 @@ Then configure the rules you want to use under the rules section.
           "for": [
             {
               "replace": "COUNTER1",
-              "start": 1,
+              "start": 0,
               "end": 10,
               "step": 1
             },
             {
               "replace": "COUNTER2",
-              "start": 5,
-              "end": 11,
-              "step": 5
+              "start": 0,
+              "end": 20,
+              "step": 10
             }
           ]
         }
@@ -79,6 +79,8 @@ Then configure the rules you want to use under the rules section.
   }
 }
 ```
+
+You can find [example of usage in this project](https://github.com/Arondight/Adachi-BOT/blob/master/.eslintrc.json).
 
 ## LICENSE
 
