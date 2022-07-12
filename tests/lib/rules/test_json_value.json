@@ -1,6 +1,7 @@
 {
   "data": {
     "name": "Mr. Cat",
+    "age": 100,
     "records": [
       {
         "id": 10000

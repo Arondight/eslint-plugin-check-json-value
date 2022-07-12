@@ -135,4 +135,36 @@ describe("json-value", () => {
     it("should get nothing with a false condition", () =>
       assert.deepEqual(expect, result[0].messages));
   });
+
+  describe("not match value with true conditions", () => {
+    const config = path.resolve(
+      rulesDir,
+      "test_json_value_invalid_if_conditions_true_eslintrc.json"
+    );
+    const result = runner(config, json);
+    const expect = [
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[0].id" doesn\'t match any of "not match"',
+        column: null,
+        nodeType: null,
+      },
+    ];
+
+    it("should get error when not match with true conditions", () =>
+      assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe("not match value with false conditions", () => {
+    const config = path.resolve(
+      rulesDir,
+      "test_json_value_invalid_if_conditions_false_eslintrc.json"
+    );
+    const result = runner(config, json);
+    const expect = [];
+
+    it("should get nothing with false conditions", () =>
+      assert.deepEqual(expect, result[0].messages));
+  });
 });
