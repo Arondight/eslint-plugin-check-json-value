@@ -21,24 +21,26 @@ describe("json-lint", function () {
     const result = runner(config, json);
     const expect = [
       {
+        column: 3,
+        endColumn: 5,
+        endLine: 2,
+        line: 2,
+        message: "Property keys must be doublequoted",
+        messageId: "errorMessage",
+        nodeType: null,
         ruleId: "check-json-value/json-lint",
         severity: 2,
-        message: "Property keys must be doublequoted",
-        line: 2,
-        column: 3,
-        nodeType: null,
-        endLine: 2,
-        endColumn: 5,
       },
       {
+        column: 21,
+        endColumn: 22,
+        endLine: 3,
+        line: 3,
+        message: "Trailing comma",
+        messageId: "errorMessage",
+        nodeType: null,
         ruleId: "check-json-value/json-lint",
         severity: 2,
-        message: "Trailing comma",
-        line: 3,
-        column: 21,
-        nodeType: null,
-        endLine: 3,
-        endColumn: 22,
       },
     ];
 
