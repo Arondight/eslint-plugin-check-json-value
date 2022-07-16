@@ -109,7 +109,7 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-See schemas of rules [check-json-value/json-lint](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_lint.js) and [check-json-value/json-value](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_lint.js). Also here are [examples of usage in unit tests](https://github.com/Arondight/eslint-plugin-check-json-value/tree/master/tests/lib/rules) for rules.
+See schemas of rules [check-json-value/json-lint](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_lint.js) and [check-json-value/json-value](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_value.js). Also here are [examples of usage in unit tests](https://github.com/Arondight/eslint-plugin-check-json-value/tree/master/tests/lib/rules) for rules.
 
 ## LICENSE
 
