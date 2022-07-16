@@ -7,11 +7,7 @@
   "parserOptions": {
     "ecmaVersion": 2022
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:node/recommended",
-    "plugin:json/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:node/recommended", "plugin:json/recommended"],
   "overrides": [
     {
       "files": ["lib/rules/*.js"],

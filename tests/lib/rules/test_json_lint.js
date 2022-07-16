@@ -12,8 +12,7 @@ describe("json-lint", function () {
     const result = runner(config, json);
     const expect = [];
 
-    it("should get nothing with valid JSON file", () =>
-      assert.deepEqual(expect, result[0].messages));
+    it("should get nothing with valid JSON file", () => assert.deepEqual(expect, result[0].messages));
   });
 
   describe("lint invalid JSON file", () => {
@@ -44,7 +43,6 @@ describe("json-lint", function () {
       },
     ];
 
-    it("should get error with invalid JSON file", () =>
-      assert.deepEqual(expect, result[0].messages));
+    it("should get error with invalid JSON file", () => assert.deepEqual(expect, result[0].messages));
   });
 });

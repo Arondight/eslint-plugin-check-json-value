@@ -12,6 +12,11 @@
               "type": "number",
               "value": "^\\d{4,6}$",
               "ignoreCase": false
+            },
+            {
+              "type": "null",
+              "value": null,
+              "ignoreCase": false
             }
           ]
         }
