@@ -43,31 +43,60 @@ Then configure the rules you want to use under the rules section.
         {
           "file": "member-.+\\.json",
           "path": "gender",
-          "values": ["^(fe)?males$"]
+          "values": [
+            {
+              "type": "string",
+              "value": "^(fe)?males$",
+              "ignoreCase": false
+            }
+          ]
         },
         {
           "file": "data/record-201[0-9]\\.json",
-          "path": "records[COUNTER1].items[COUNTER2]",
-          "values": ["^\\d{4,6}$"],
+          "path": "records[{{COUNTER1}}].items[{{COUNTER2]}}",
+          "values": [
+            {
+              "type": "number",
+              "value": "^\\d{4,6}$",
+              "ignoreCase": false
+            }
+          ],
           "if": [
             {
               "path": "status",
-              "values": ["^NEED CONFIRM$", "^UNCONFIRMED$"]
+              "values": [
+                {
+                  "type": "string",
+                  "value": "^NEED CONFIRM$",
+                  "ignoreCase": true
+                },
+                {
+                  "type": "string",
+                  "value": "^UNCONFIRMED$",
+                  "ignoreCase": true
+                }
+              ]
             },
             {
               "path": "complete",
-              "values": ["^true$"]
+              "values": [
+                {
+                  "type": "boolean",
+                  "value": true,
+                  "ignoreCase": false
+                }
+              ]
             }
           ],
           "for": [
             {
-              "replace": "COUNTER1",
+              "replace": "{{COUNTER1}}",
               "start": 0,
               "end": 10,
               "step": 1
             },
             {
-              "replace": "COUNTER2",
+              "replace": "{{COUNTER2}}",
               "start": 0,
               "end": 20,
               "step": 10
@@ -80,7 +109,7 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-You can find [example of usage in this project](https://github.com/Arondight/Adachi-BOT/blob/master/.eslintrc.json).
+See schemas of rules [check-json-value/json-lint](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_lint.js) and [check-json-value/json-value](https://github.com/Arondight/eslint-plugin-check-json-value/blob/master/lib/rules/meta/json_lint.js). Also here are [examples of usage in unit tests](https://github.com/Arondight/eslint-plugin-check-json-value/tree/master/tests/lib/rules) for rules.
 
 ## LICENSE
 

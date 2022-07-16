@@ -7,7 +7,13 @@
         {
           "file": "test_json_value\\.json",
           "path": "data.records[1].id",
-          "values": ["^null$"]
+          "values": [
+            {
+              "type": "null",
+              "value": null,
+              "ignoreCase": false
+            }
+          ]
         }
       ]
     ]

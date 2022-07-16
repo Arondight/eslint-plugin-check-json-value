@@ -6,8 +6,25 @@
       [
         {
           "file": "test_json_value\\.json",
+          "path": "data.records[1].id",
+          "values": [
+            {
+              "type": "null",
+              "value": null,
+              "ignoreCase": false
+            }
+          ]
+        },
+        {
+          "file": "test_json_value\\.json",
           "path": "data.records[2].id",
-          "values": ["^$"]
+          "values": [
+            {
+              "type": "string",
+              "value": "^$",
+              "ignoreCase": false
+            }
+          ]
         }
       ]
     ]

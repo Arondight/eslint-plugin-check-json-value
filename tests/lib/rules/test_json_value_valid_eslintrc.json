@@ -7,7 +7,13 @@
         {
           "file": "test_json_value\\.json",
           "path": "data.records[0].id",
-          "values": ["^\\d{4,6}$"]
+          "values": [
+            {
+              "type": "number",
+              "value": "^\\d{4,6}$",
+              "ignoreCase": false
+            }
+          ]
         }
       ]
     ]

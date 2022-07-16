@@ -6,8 +6,14 @@
       [
         {
           "file": "test_json_value\\.json",
-          "path": "not exists",
-          "values": [""]
+          "path": "that.is.a.great.day",
+          "values": [
+            {
+              "type": "string",
+              "value": "^yes$",
+              "ignoreCase": true
+            }
+          ]
         }
       ]
     ]

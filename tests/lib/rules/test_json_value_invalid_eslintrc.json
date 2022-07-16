@@ -7,7 +7,18 @@
         {
           "file": "test_json_value\\.json",
           "path": "data.records[3].id",
-          "values": ["not match"]
+          "values": [
+            {
+              "type": "number",
+              "value": 0,
+              "ignoreCase": false
+            },
+            {
+              "type": "number",
+              "value": 99999,
+              "ignoreCase": false
+            }
+          ]
         }
       ]
     ]

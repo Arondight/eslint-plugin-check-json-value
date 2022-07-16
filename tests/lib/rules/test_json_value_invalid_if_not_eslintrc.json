@@ -7,11 +7,23 @@
         {
           "file": "test_json_value\\.json",
           "path": "data.records[0].id",
-          "values": ["not match"],
+          "values": [
+            {
+              "type": "number",
+              "value": 99999,
+              "ignoreCase": false
+            }
+          ],
           "if": [
             {
               "path": "data.name",
-              "values": ["^Mr\\.\\sDog$"]
+              "values": [
+                {
+                  "type": "string",
+                  "value": "^mr\\.\\sdog$",
+                  "ignoreCase": true
+                }
+              ]
             }
           ]
         }

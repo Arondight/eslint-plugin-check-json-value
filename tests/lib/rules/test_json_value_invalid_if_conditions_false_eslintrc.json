@@ -7,15 +7,33 @@
         {
           "file": "test_json_value\\.json",
           "path": "data.records[0].id",
-          "values": ["not match"],
+          "values": [
+            {
+              "type": "number",
+              "value": 99999,
+              "ignoreCase": false
+            }
+          ],
           "if": [
             {
               "path": "data.name",
-              "values": ["^Mr\\.\\sCat$"]
+              "values": [
+                {
+                  "type": "string",
+                  "value": "^mr\\.\\scat$",
+                  "ignoreCase": true
+                }
+              ]
             },
             {
               "path": "data.age",
-              "values": ["^001$"]
+              "values": [
+                {
+                  "type": "number",
+                  "value": "^99999$",
+                  "ignoreCase": false
+                }
+              ]
             }
           ]
         }

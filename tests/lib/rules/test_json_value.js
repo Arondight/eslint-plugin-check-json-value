@@ -27,12 +27,13 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [
       {
-        column: null,
-        message: 'path "not exists" is not exists',
-        messageId: "pathNotExists",
-        nodeType: null,
         ruleId: "check-json-value/json-value",
         severity: 2,
+        message: 'path "that.is.a.great.day" is not exists',
+        column: null,
+        nodeType: null,
+        messageId: "pathNotExists",
+        endColumn: null,
       },
     ];
 
@@ -60,8 +61,11 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [
       {
-        column: null,
-        message: `path "data.records[3].id" doesn't match any of not match`,
+        column: 16,
+        endColumn: 23,
+        endLine: 19,
+        line: 19,
+        message: `path "data.records[3].id" doesn't match any of [ 0 , 99999 ]`,
         messageId: "valueNotMatch",
         nodeType: null,
         ruleId: "check-json-value/json-value",
@@ -114,8 +118,11 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [
       {
-        column: null,
-        message: `path "data.records[0].id" doesn't match any of not match`,
+        column: 16,
+        endColumn: 21,
+        endLine: 7,
+        line: 7,
+        message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
         messageId: "valueNotMatch",
         nodeType: null,
         ruleId: "check-json-value/json-value",
@@ -147,8 +154,11 @@ describe("json-value", () => {
     const result = runner(config, json);
     const expect = [
       {
-        column: null,
-        message: `path "data.records[0].id" doesn't match any of not match`,
+        column: 16,
+        endColumn: 21,
+        endLine: 7,
+        line: 7,
+        message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
         messageId: "valueNotMatch",
         nodeType: null,
         ruleId: "check-json-value/json-value",
@@ -186,6 +196,7 @@ describe("json-value", () => {
         column: null,
         nodeType: null,
         messageId: "pathNotExists",
+        endColumn: null,
       },
       {
         ruleId: "check-json-value/json-value",
@@ -194,6 +205,7 @@ describe("json-value", () => {
         column: null,
         nodeType: null,
         messageId: "pathNotExists",
+        endColumn: null,
       },
       {
         ruleId: "check-json-value/json-value",
@@ -202,24 +214,31 @@ describe("json-value", () => {
         column: null,
         nodeType: null,
         messageId: "pathNotExists",
+        endColumn: null,
       },
       {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message:
-          'path "data.records[2].values[0]" doesn\'t match any of ^\\d+$',
-        column: null,
+          'path "data.records[2].values[0]" doesn\'t match any of [ ^\\d+$ ]',
+        line: 16,
+        column: 21,
         nodeType: null,
         messageId: "valueNotMatch",
+        endLine: 16,
+        endColumn: 25,
       },
       {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message:
-          'path "data.records[2].values[1]" doesn\'t match any of ^\\d+$',
-        column: null,
+          'path "data.records[2].values[1]" doesn\'t match any of [ ^\\d+$ ]',
+        line: 16,
+        column: 27,
         nodeType: null,
         messageId: "valueNotMatch",
+        endLine: 16,
+        endColumn: 34,
       },
       {
         ruleId: "check-json-value/json-value",
@@ -228,6 +247,7 @@ describe("json-value", () => {
         column: null,
         nodeType: null,
         messageId: "pathNotExists",
+        endColumn: null,
       },
     ];
 
