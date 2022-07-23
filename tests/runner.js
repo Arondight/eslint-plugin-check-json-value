@@ -9,13 +9,12 @@ module.exports = function (config, ...rest) {
   const cmd = os.type().includes("Windows") ? "npx.cmd" : "npx";
   const args = ["eslint", "-f", "json", "-c", config, ...rest];
   const options = { encoding: "utf8" };
-  const process = spawnSync(cmd, args, options);
   let result = {};
 
   try {
-    result = JSON.parse(String(process.stdout));
+    result = JSON.parse(String(spawnSync(cmd, args, options).stdout));
   } catch (e) {
-    // do nothing
+    console.error(e);
   }
 
   return result;
