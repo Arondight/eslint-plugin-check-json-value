@@ -21,7 +21,7 @@
   "scripts": {
     "check": "npx eslint ./.*.json ./lib/ ./tests/*.js ./tests/lib/rules/*.js",
     "format": "npx prettier --config ./.prettierrc.json -uw ./.*.json ./*.md ./lib/ ./tests/*.js ./tests/lib/rules/*.js",
-    "test": "npx mocha ./tests/lib/rules/"
+    "test": "npx cross-env-shell NODE_PATH=$INIT_CWD/.. mocha ./tests/lib/rules/"
   },
   "dependencies": {
     "@anchan828/json-ast": "^2.1.63",
@@ -29,6 +29,7 @@
     "vscode-json-languageservice": "^5.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.20.0",
     "eslint-plugin-eslint-plugin": "^5.0.1",
     "eslint-plugin-json": "^3.1.0",
