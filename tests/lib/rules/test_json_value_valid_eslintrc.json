@@ -10,13 +10,11 @@
           "values": [
             {
               "type": "number",
-              "value": "^\\d{4,6}$",
-              "ignoreCase": false
+              "value": "^\\d{4,6}$"
             },
             {
               "type": "null",
-              "value": null,
-              "ignoreCase": false
+              "value": null
             }
           ]
         }

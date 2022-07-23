@@ -10,8 +10,7 @@
           "values": [
             {
               "type": "null",
-              "value": null,
-              "ignoreCase": false
+              "value": null
             }
           ]
         },
@@ -21,8 +20,7 @@
           "values": [
             {
               "type": "string",
-              "value": "^$",
-              "ignoreCase": false
+              "value": "^$"
             }
           ]
         }

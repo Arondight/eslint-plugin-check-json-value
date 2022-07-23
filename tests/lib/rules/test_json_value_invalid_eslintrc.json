@@ -10,13 +10,11 @@
           "values": [
             {
               "type": "number",
-              "value": 0,
-              "ignoreCase": false
+              "value": 0
             },
             {
               "type": "number",
-              "value": 99999,
-              "ignoreCase": false
+              "value": 99999
             }
           ]
         }

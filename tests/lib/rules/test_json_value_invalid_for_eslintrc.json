@@ -10,8 +10,7 @@
           "values": [
             {
               "type": "number",
-              "value": "^\\d+$",
-              "ignoreCase": false
+              "value": "^\\d+$"
             }
           ],
           "for": [

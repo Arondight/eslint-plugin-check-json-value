@@ -46,8 +46,7 @@ Then configure the rules you want to use under the rules section.
           "values": [
             {
               "type": "string",
-              "value": "^(fe)?males$",
-              "ignoreCase": false
+              "value": "^(fe)?males$"
             }
           ]
         },
@@ -57,8 +56,7 @@ Then configure the rules you want to use under the rules section.
           "values": [
             {
               "type": "number",
-              "value": "^\\d{4,6}$",
-              "ignoreCase": false
+              "value": "^\\d{4,6}$"
             }
           ],
           "if": [
@@ -67,12 +65,12 @@ Then configure the rules you want to use under the rules section.
               "values": [
                 {
                   "type": "string",
-                  "value": "^NEED CONFIRM$",
+                  "value": "^need confirm$",
                   "ignoreCase": true
                 },
                 {
                   "type": "string",
-                  "value": "^UNCONFIRMED$",
+                  "value": "^unconfirmed$",
                   "ignoreCase": true
                 }
               ]
@@ -82,8 +80,7 @@ Then configure the rules you want to use under the rules section.
               "values": [
                 {
                   "type": "boolean",
-                  "value": true,
-                  "ignoreCase": false
+                  "value": true
                 }
               ]
             }

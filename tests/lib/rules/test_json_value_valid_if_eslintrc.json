@@ -10,8 +10,7 @@
           "values": [
             {
               "type": "number",
-              "value": "^\\d{4,6}$",
-              "ignoreCase": false
+              "value": "^\\d{4,6}$"
             }
           ],
           "if": [

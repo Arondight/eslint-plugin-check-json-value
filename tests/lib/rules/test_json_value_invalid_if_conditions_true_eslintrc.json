@@ -10,8 +10,7 @@
           "values": [
             {
               "type": "number",
-              "value": 99999,
-              "ignoreCase": false
+              "value": 99999
             }
           ],
           "if": [
@@ -30,8 +29,7 @@
               "values": [
                 {
                   "type": "number",
-                  "value": 100,
-                  "ignoreCase": false
+                  "value": 100
                 }
               ]
             }
