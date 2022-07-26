@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-check-json-value",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "ESLint plugin to check value of JSON file",
   "keywords": [
     "eslint",
@@ -24,7 +24,7 @@
     "test": "npx cross-env-shell NODE_PATH=$INIT_CWD/.. mocha ./tests/lib/rules/"
   },
   "dependencies": {
-    "@anchan828/json-ast": "^2.1.63",
+    "@anchan828/json-ast": "^2.1.65",
     "lodash": "^4.17.21",
     "vscode-json-languageservice": "^5.1.0"
   },
