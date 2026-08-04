@@ -2,20 +2,12 @@ const assert = require("assert");
 const runner = require("../../runner.js");
 const path = require("path");
 
-describe("json-lint", function () {
+describe("recommended config", () => {
   const testDir = path.dirname(require.resolve("../../runner.js"));
   const rulesDir = path.resolve(testDir, "lib", "rules");
-  const config = path.resolve(rulesDir, "test_json_lint_eslintrc.json");
+  const config = path.resolve(rulesDir, "test_recommended_eslintrc.json");
 
-  describe("lint valid JSON file", () => {
-    const json = path.resolve(rulesDir, "test_json_lint_valid.json");
-    const result = runner(config, json);
-    const expect = [];
-
-    it("should get nothing with valid JSON file", () => assert.deepEqual(expect, result[0].messages));
-  });
-
-  describe("lint invalid JSON file", () => {
+  describe("loads via extends and lints invalid JSON", () => {
     const json = path.resolve(rulesDir, "test_json_lint_invalid.json");
     const result = runner(config, json);
     const expect = [
@@ -41,6 +33,15 @@ describe("json-lint", function () {
       },
     ];
 
-    it("should get error with invalid JSON file", () => assert.deepEqual(expect, result[0].messages));
+    it("should get json-lint errors via the recommended config", () => assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe("loads via extends and lints valid JSON", () => {
+    const json = path.resolve(rulesDir, "test_json_lint_valid.json");
+    const result = runner(config, json);
+    const expect = [];
+
+    it("should get nothing with valid JSON via the recommended config", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 });

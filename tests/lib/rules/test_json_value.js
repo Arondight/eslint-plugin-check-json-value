@@ -23,9 +23,10 @@ describe("json-value", () => {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message: 'path "that.is.a.great.day" is not exists',
+        line: null,
         column: null,
-        nodeType: null,
         messageId: "pathNotExists",
+        endLine: null,
         endColumn: null,
       },
     ];
@@ -52,7 +53,6 @@ describe("json-value", () => {
         line: 19,
         message: `path "data.records[3].id" doesn't match any of [ 0 , 99999 ]`,
         messageId: "valueNotMatch",
-        nodeType: null,
         ruleId: "check-json-value/json-value",
         severity: 2,
       },
@@ -96,7 +96,6 @@ describe("json-value", () => {
         line: 7,
         message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
         messageId: "valueNotMatch",
-        nodeType: null,
         ruleId: "check-json-value/json-value",
         severity: 2,
       },
@@ -124,7 +123,6 @@ describe("json-value", () => {
         line: 7,
         message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
         messageId: "valueNotMatch",
-        nodeType: null,
         ruleId: "check-json-value/json-value",
         severity: 2,
       },
@@ -149,27 +147,30 @@ describe("json-value", () => {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message: 'path "data.records[1].values[0]" is not exists',
+        line: null,
         column: null,
-        nodeType: null,
         messageId: "pathNotExists",
+        endLine: null,
         endColumn: null,
       },
       {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message: 'path "data.records[1].values[1]" is not exists',
+        line: null,
         column: null,
-        nodeType: null,
         messageId: "pathNotExists",
+        endLine: null,
         endColumn: null,
       },
       {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message: 'path "data.records[1].values[2]" is not exists',
+        line: null,
         column: null,
-        nodeType: null,
         messageId: "pathNotExists",
+        endLine: null,
         endColumn: null,
       },
       {
@@ -178,7 +179,6 @@ describe("json-value", () => {
         message: 'path "data.records[2].values[0]" doesn\'t match any of [ ^\\d+$ ]',
         line: 16,
         column: 21,
-        nodeType: null,
         messageId: "valueNotMatch",
         endLine: 16,
         endColumn: 25,
@@ -189,7 +189,6 @@ describe("json-value", () => {
         message: 'path "data.records[2].values[1]" doesn\'t match any of [ ^\\d+$ ]',
         line: 16,
         column: 27,
-        nodeType: null,
         messageId: "valueNotMatch",
         endLine: 16,
         endColumn: 34,
@@ -198,13 +197,89 @@ describe("json-value", () => {
         ruleId: "check-json-value/json-value",
         severity: 2,
         message: 'path "data.records[2].values[2]" is not exists',
+        line: null,
         column: null,
-        nodeType: null,
         messageId: "pathNotExists",
+        endLine: null,
         endColumn: null,
       },
     ];
 
     it("should get error when not match valid value with for", () => assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe("step guard: step===0 must not hang", () => {
+    const config = path.resolve(rulesDir, "test_json_value_step_guard_eslintrc.json");
+    const result = runner(config, json);
+    const expect = [
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: 'path "data.records[{{X}}].id" is not exists',
+        line: null,
+        column: null,
+        messageId: "pathNotExists",
+        endLine: null,
+        endColumn: null,
+      },
+    ];
+
+    it("should skip expansion and report the unreplaced placeholder path", () =>
+      assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe("invalid regex must surface a clear error, not a raw crash", () => {
+    const config = path.resolve(rulesDir, "test_json_value_invalid_regex_eslintrc.json");
+
+    it("should throw with an 'invalid regex' message", () =>
+      assert.throws(() => runner(config, json), /invalid regex/));
+  });
+
+  describe('logic "or": one condition matches, one doesn\'t', () => {
+    const config = path.resolve(rulesDir, "test_json_value_if_or_pass_eslintrc.json");
+    const result = runner(config, json);
+    const expect = [
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
+        line: 7,
+        column: 16,
+        messageId: "valueNotMatch",
+        endLine: 7,
+        endColumn: 21,
+      },
+    ];
+
+    it("should run the check (OR satisfied) and report valueNotMatch", () =>
+      assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe('logic "or": no conditions match', () => {
+    const config = path.resolve(rulesDir, "test_json_value_if_or_fail_eslintrc.json");
+    const result = runner(config, json);
+    const expect = [];
+
+    it("should skip the check (OR not satisfied) and get nothing", () => assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe('logic "or": one path missing, another matches', () => {
+    const config = path.resolve(rulesDir, "test_json_value_if_or_missing_path_eslintrc.json");
+    const result = runner(config, json);
+    const expect = [
+      {
+        ruleId: "check-json-value/json-value",
+        severity: 2,
+        message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
+        line: 7,
+        column: 16,
+        messageId: "valueNotMatch",
+        endLine: 7,
+        endColumn: 21,
+      },
+    ];
+
+    it("should run the check (OR satisfied by the existing path) and report valueNotMatch", () =>
+      assert.deepEqual(expect, result[0].messages));
   });
 });

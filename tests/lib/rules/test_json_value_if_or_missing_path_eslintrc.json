@@ -1,0 +1,41 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "data.records[0].id",
+          "values": [
+            {
+              "type": "number",
+              "value": 99999
+            }
+          ],
+          "if": [
+            {
+              "path": "data.nonexistent",
+              "values": [
+                {
+                  "type": "string",
+                  "value": "^foo$"
+                }
+              ]
+            },
+            {
+              "path": "data.age",
+              "values": [
+                {
+                  "type": "number",
+                  "value": 100
+                }
+              ]
+            }
+          ],
+          "logic": "or"
+        }
+      ]
+    ]
+  }
+}

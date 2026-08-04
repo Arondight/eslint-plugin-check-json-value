@@ -1,0 +1,3 @@
+{
+  "extends": ["plugin:check-json-value/recommended"]
+}

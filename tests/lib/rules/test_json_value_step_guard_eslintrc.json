@@ -1,0 +1,28 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "data.records[{{X}}].id",
+          "values": [
+            {
+              "type": "number",
+              "value": "^\\d+$"
+            }
+          ],
+          "for": [
+            {
+              "replace": "{{X}}",
+              "start": 0,
+              "end": 4,
+              "step": 0
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}
