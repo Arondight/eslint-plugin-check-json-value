@@ -6,6 +6,18 @@ describe("json-value", () => {
   const testDir = path.dirname(require.resolve("../../runner.js"));
   const rulesDir = path.resolve(testDir, "lib", "rules");
   const json = path.resolve(rulesDir, "test_json_value.json");
+  const expectError = [
+    {
+      ruleId: "check-json-value/json-value",
+      severity: 2,
+      message: `path "data.records[0].id" doesn't match any of [ 99999 ]`,
+      line: 7,
+      column: 16,
+      messageId: "valueNotMatch",
+      endLine: 7,
+      endColumn: 21,
+    },
+  ];
 
   describe("match empty value", () => {
     const config = path.resolve(rulesDir, "test_json_value_empty_eslintrc.json");
@@ -281,5 +293,94 @@ describe("json-value", () => {
 
     it("should run the check (OR satisfied by the existing path) and report valueNotMatch", () =>
       assert.deepEqual(expect, result[0].messages));
+  });
+
+  describe("inline logic tokens (new if format)", () => {
+    describe("inline OR (no blocks) — check runs when one condition passes", () => {
+      const config = path.resolve(rulesDir, "test_json_value_if_inline_or_pass_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+
+    describe("block grouping: (A AND B) OR C — true when A fails but C passes", () => {
+      // A=name^dog$ (false), B=age==100 (true), C=id==10000 (true): (false AND true) OR true = true
+      const config = path.resolve(rulesDir, "test_json_value_if_block_and_or_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+
+    describe("block grouping: A AND (B OR C) — false when A fails despite B,C passing", () => {
+      // Same A,B,C, different grouping: false AND (true OR true) = false
+      const config = path.resolve(rulesDir, "test_json_value_if_block_or_and_eslintrc.json");
+      const result = runner(config, json);
+      it("should skip the check (AND not satisfied) and get nothing", () => assert.deepEqual([], result[0].messages));
+    });
+  });
+
+  describe("if backward compat (old format with logic field)", () => {
+    describe("explicit logic:and with both conditions true", () => {
+      // A=name^Mr.Cat$ (true), C=age==100 (true): true AND true → check runs
+      const config = path.resolve(rulesDir, "test_json_value_if_compat_and_true_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+
+    describe("explicit logic:and with one condition false", () => {
+      // A=true, B=name^dog$ (false): true AND false → check skipped
+      const config = path.resolve(rulesDir, "test_json_value_if_compat_and_false_eslintrc.json");
+      const result = runner(config, json);
+      it("should skip the check and get nothing", () => assert.deepEqual([], result[0].messages));
+    });
+  });
+
+  describe("old-vs-new format equivalence", () => {
+    describe("new [B, {logic:or}, C] produces same result as old [B, C] + logic:or", () => {
+      // B=false, C=true: old format gives OR-satisfied (existing if_or_pass); new format should match
+      const config = path.resolve(rulesDir, "test_json_value_if_compat_equiv_or_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch (same as old format)", () =>
+        assert.deepEqual(expectError, result[0].messages));
+    });
+  });
+
+  describe("complex nested logic (block grouping)", () => {
+    // A=name^Mr.Cat$ (true) B=name^dog$ (false) C=age==100 (true) D=age==99999 (false) E=id==10000 (true) F=records[1].id null (true)
+
+    describe("((B AND C) OR (D AND E)) AND A → false → skip", () => {
+      // (false∧true) ∨ (false∧true) = false; false ∧ true = false
+      const config = path.resolve(rulesDir, "test_json_value_if_nested_1_eslintrc.json");
+      const result = runner(config, json);
+      it("should skip the check and get nothing", () => assert.deepEqual([], result[0].messages));
+    });
+
+    describe("A OR (B AND (C OR D)) → true → check runs", () => {
+      // C∨D=true; B∧true=false; A∨false=true
+      const config = path.resolve(rulesDir, "test_json_value_if_nested_2_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+
+    describe("(A AND B) OR (C AND D) OR (E AND F) → true (third pair) → check runs", () => {
+      // (true∧false)=false ∨ (true∧false)=false ∨ (true∧true)=true → true
+      const config = path.resolve(rulesDir, "test_json_value_if_nested_3_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+
+    describe("A AND (B OR (C AND (D OR E))) → true → check runs (3-level nesting)", () => {
+      // D∨E=true; C∧true=true; B∨true=true; A∧true=true
+      const config = path.resolve(rulesDir, "test_json_value_if_nested_4_eslintrc.json");
+      const result = runner(config, json);
+      it("should run the check and report valueNotMatch", () => assert.deepEqual(expectError, result[0].messages));
+    });
+  });
+
+  describe("implicit AND (adjacent conditions without operator)", () => {
+    describe("[A, {logic:and}, C, B] — B has no operator, implicit AND → false → skip", () => {
+      // A=true, {and}, C=true, then B (no operator) → implicit AND: true ∧ true ∧ false = false
+      const config = path.resolve(rulesDir, "test_json_value_if_implicit_and_eslintrc.json");
+      const result = runner(config, json);
+      it("should skip the check and get nothing", () => assert.deepEqual([], result[0].messages));
+    });
   });
 });

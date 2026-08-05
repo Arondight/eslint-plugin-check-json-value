@@ -1,0 +1,61 @@
+{
+  "plugins": ["check-json-value"],
+  "rules": {
+    "check-json-value/json-value": [
+      "error",
+      [
+        {
+          "file": "test_json_value\\.json",
+          "path": "data.records[0].id",
+          "values": [
+            {
+              "type": "number",
+              "value": 99999
+            }
+          ],
+          "if": [
+            {
+              "path": "data.name",
+              "values": [
+                {
+                  "type": "string",
+                  "value": "^dog$"
+                }
+              ]
+            },
+            {
+              "logic": "and"
+            },
+            {
+              "block": "start"
+            },
+            {
+              "path": "data.age",
+              "values": [
+                {
+                  "type": "number",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "logic": "or"
+            },
+            {
+              "path": "data.records[0].id",
+              "values": [
+                {
+                  "type": "number",
+                  "value": 10000
+                }
+              ]
+            },
+            {
+              "block": "end"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}

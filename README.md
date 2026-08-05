@@ -4,10 +4,10 @@ ESLint plugin to check value of JSON file.
 
 This plugin provides two rules:
 
-- **`json-lint`** — validates JSON syntax (missing quotes, trailing commas, etc.)
+- **`json-lint`** — validates JSON syntax (missing quotes, trailing commas, duplicate keys, comments in strict JSON, etc.)
 - **`json-value`** — validates JSON values against patterns you define (regex, literal, type)
 
-Both rules work on `.json` files. The plugin registers a [processor](https://eslint.org/docs/latest/extend/custom-processors) that parses each JSON file into an AST, which the rules then traverse.
+Both rules work on `.json` and `.jsonc` files. `.json` files are linted in strict mode (comments are errors); `.jsonc` files allow comments. The plugin registers a [processor](https://eslint.org/docs/latest/extend/custom-processors) that parses each JSON file into an AST, which the rules then traverse.
 
 ## Table of Contents
 
@@ -85,7 +85,7 @@ module.exports = [
 ];
 ```
 
-> **Note:** In flat config, the `.json` processor is **not** auto-applied. Always spread `flat/recommended` (or wire the processor manually) so that JSON files are parsed before the rules run.
+> **Note:** In flat config, the `.json`/`.jsonc` processor is **not** auto-applied. Always spread `flat/recommended` (or wire the processor manually) so that JSON files are parsed before the rules run.
 
 ### ESLint 8.x (legacy config)
 
@@ -132,7 +132,9 @@ Or use the `recommended` config via `extends` (enables `json-lint` only):
 
 ### json-lint
 
-Validates JSON syntax. Reports errors such as unquoted property keys, trailing commas, and other structural issues.
+Validates JSON syntax. Reports errors such as unquoted property keys, trailing commas, duplicate keys, and other structural issues.
+
+**JSON vs JSONC auto-detection:** `.json` files are treated as strict JSON — comments (`//` and `/* */`) are reported as errors. `.jsonc` files allow comments. The file extension determines the mode automatically; no configuration needed.
 
 **Type:** suggestion
 
@@ -140,15 +142,19 @@ Validates JSON syntax. Reports errors such as unquoted property keys, trailing c
 
 ```json
 {
-  "lint": true
+  "lint": true,
+  "strict": true
 }
 ```
 
-| Option | Type      | Default | Description                              |
-| ------ | --------- | ------- | ---------------------------------------- |
-| `lint` | `boolean` | `false` | Set to `true` to enable syntax checking. |
+| Option   | Type      | Default | Description                                                                   |
+| -------- | --------- | ------- | ----------------------------------------------------------------------------- |
+| `lint`   | `boolean` | `false` | Set to `true` to enable syntax checking.                                      |
+| `strict` | `boolean` | `true`  | Set to `false` to suppress comment detection in `.json` files (escape hatch). |
 
 When `lint` is `false` or omitted, the rule does nothing.
+
+`strict` defaults to `true` (comments are flagged in `.json` files). Set `"strict": false` to allow comments in `.json` files without renaming to `.jsonc`.
 
 **Example:**
 
@@ -202,6 +208,12 @@ A regex pattern string tested against the file's full path. The check only appli
 ```
 
 This matches `member-001.json`, `member-alice.json`, etc.
+
+To match both `.json` and `.jsonc` files, include both extensions in the pattern:
+
+```json
+"file": "member-.+\\.(json|jsonc)"
+```
 
 ### path
 
@@ -297,6 +309,76 @@ The check runs only if `verified` is `true` **AND** `published` is `true`.
 ```
 
 The check runs if `verified` is `true` **OR** `approved` is `true`.
+
+#### Inline logic tokens (new format)
+
+For more complex conditions — mixing AND/OR with explicit grouping — use inline `logic` and `block` tokens directly in the `if` array. This replaces the `logic` field on the check object (which only supports pure AND or pure OR).
+
+**Token types:**
+
+| Token     | Form                                          | Description                                      |
+| --------- | --------------------------------------------- | ------------------------------------------------ |
+| Condition | `{ "path": "...", "values": [...] }`          | A path + values check (same structure as always) |
+| Operator  | `{ "logic": "and" }` / `{ "logic": "or" }`    | Binary logic operator between conditions         |
+| Block     | `{ "block": "start" }` / `{ "block": "end" }` | Grouping markers (parentheses)                   |
+
+**Inline OR** (same as the `logic: "or"` example above, but inline):
+
+```json
+"if": [
+  { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
+  { "logic": "or" },
+  { "path": "records[0].approved", "values": [{ "type": "boolean", "value": true }] }
+]
+```
+
+**Block grouping** — `(verified OR approved) AND published`:
+
+```json
+"if": [
+  { "block": "start" },
+  { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
+  { "logic": "or" },
+  { "path": "records[0].approved", "values": [{ "type": "boolean", "value": true }] },
+  { "block": "end" },
+  { "logic": "and" },
+  { "path": "records[0].published", "values": [{ "type": "boolean", "value": true }] }
+]
+```
+
+This expression cannot be expressed with the old `logic` field (which only supports pure AND or pure OR across all conditions).
+
+**Multi-level nesting** — `A AND (B OR (C AND (D OR E)))`:
+
+```json
+"if": [
+  { "path": "records[0].status", "values": [{ "type": "string", "value": "^active$" }] },
+  { "logic": "and" },
+  { "block": "start" },
+    { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
+    { "logic": "or" },
+    { "block": "start" },
+      { "path": "records[0].approved", "values": [{ "type": "boolean", "value": true }] },
+      { "logic": "and" },
+      { "block": "start" },
+        { "path": "records[0].draft", "values": [{ "type": "boolean", "value": true }] },
+        { "logic": "or" },
+        { "path": "records[0].pending", "values": [{ "type": "boolean", "value": true }] },
+      { "block": "end" },
+    { "block": "end" },
+  { "block": "end" }
+]
+```
+
+Blocks can nest arbitrarily deep. Each `{ "block": "start" }` / `{ "block": "end" }` pair acts as a parenthesis group.
+
+**Evaluation rules:**
+
+- **Left-to-right**, no operator precedence. `[A, { "logic": "or" }, B, { "logic": "and" }, C]` evaluates as `(A OR B) AND C`, not `A OR (B AND C)`.
+- **Block markers** provide explicit grouping (parentheses). Use them when you need a specific precedence.
+- **Implicit AND**: two conditions adjacent without an operator default to AND.
+- **Short-circuit**: AND stops on the first `false`; OR stops on the first `true`.
+- **Backward compat**: if no `logic`/`block` tokens are present in the `if` array, the old format is used (all conditions with the `logic` field on the check object). Existing configs work unchanged.
 
 If a condition's path doesn't exist in the JSON, that condition is considered **not satisfied**. With AND (default), this causes the check to be skipped. With OR, the check still runs if another condition is satisfied.
 

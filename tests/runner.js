@@ -50,7 +50,7 @@ module.exports = [
     rules: ${JSON.stringify(rules, null, 2)}
   },
   {
-    files: ["**/*.json"],
+    files: ["**/*.{json,jsonc}"],
     processor: plugin.processors.json
   }
 ];`;
@@ -85,9 +85,7 @@ module.exports = function (configPath, ...rest) {
   const args = useFlatEnv
     ? ["eslint", "-f", "json", "--config", tempConfig, ...rest]
     : ["eslint", "-f", "json", "--no-config-lookup", "--config", tempConfig, ...rest];
-  const env = useFlatEnv
-    ? { ...process.env, ESLINT_USE_FLAT_CONFIG: "true" }
-    : process.env;
+  const env = useFlatEnv ? { ...process.env, ESLINT_USE_FLAT_CONFIG: "true" } : process.env;
 
   try {
     fs.writeFileSync(tempConfig, configCode);
