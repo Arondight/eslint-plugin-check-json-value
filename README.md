@@ -49,7 +49,7 @@ npm install --save-dev eslint-plugin-check-json-value
 
 ### ESLint 9+ (flat config)
 
-In your `eslint.config.js`, import the plugin and spread the `flat/recommended` config. This registers the plugin, enables `json-lint`, and wires the `.json` processor automatically.
+In your `eslint.config.js`, import the plugin and spread the `flat/recommended` config. This registers the plugin, enables `json-lint`, and wires the `.json`/`.jsonc` processor automatically.
 
 ```js
 // eslint.config.js
@@ -190,14 +190,13 @@ Validates values inside JSON files against patterns you define. You can check th
 
 Each element in the `json-value` options array is a check object with the following fields:
 
-| Field    | Required | Description                                                                       |
-| -------- | -------- | --------------------------------------------------------------------------------- |
-| `file`   | Yes      | Regex pattern to match filenames (tested against the full path).                  |
-| `path`   | Yes      | Dot/bracket notation path to the value inside the JSON.                           |
-| `values` | Yes      | Array of value matchers. The value at `path` must match **at least one**.         |
-| `if`     | No       | Array of conditions that must be satisfied for this check to apply.               |
-| `logic`  | No       | How to combine `if` conditions: `"and"` (default, all must pass) or `"or"` (any). |
-| `for`    | No       | Array of loop definitions for expanding placeholders in `path`.                   |
+| Field    | Required | Description                                                                                              |
+| -------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `file`   | Yes      | Regex pattern to match filenames (tested against the full path).                                         |
+| `path`   | Yes      | Dot/bracket notation path to the value inside the JSON.                                                  |
+| `values` | Yes      | Array of value matchers. The value at `path` must match **at least one**.                                |
+| `if`     | No       | Array of tokens forming a boolean expression. See [if (conditional checking)](#if-conditional-checking). |
+| `for`    | No       | Array of loop definitions for expanding placeholders in `path`.                                          |
 
 ### file
 
@@ -261,58 +260,7 @@ path "data.records[0].id" doesn't match any of [ ^\d{4,6}$ , null ]
 
 ### if (conditional checking)
 
-An array of condition objects. The check only applies when the conditions are satisfied. Each condition has the same `path` + `values` structure.
-
-By default, **all** conditions must pass (AND logic). Set `logic: "or"` to require **any** condition to pass (OR logic).
-
-**AND (default):** all conditions must be satisfied:
-
-```json
-{
-  "file": "data/record-.+\\.json",
-  "path": "records[0].status",
-  "values": [{ "type": "string", "value": "^active$" }],
-  "if": [
-    {
-      "path": "records[0].verified",
-      "values": [{ "type": "boolean", "value": true }]
-    },
-    {
-      "path": "records[0].published",
-      "values": [{ "type": "boolean", "value": true }]
-    }
-  ]
-}
-```
-
-The check runs only if `verified` is `true` **AND** `published` is `true`.
-
-**OR:** at least one condition must be satisfied:
-
-```json
-{
-  "file": "data/record-.+\\.json",
-  "path": "records[0].status",
-  "values": [{ "type": "string", "value": "^active$" }],
-  "if": [
-    {
-      "path": "records[0].verified",
-      "values": [{ "type": "boolean", "value": true }]
-    },
-    {
-      "path": "records[0].approved",
-      "values": [{ "type": "boolean", "value": true }]
-    }
-  ],
-  "logic": "or"
-}
-```
-
-The check runs if `verified` is `true` **OR** `approved` is `true`.
-
-#### Inline logic tokens (new format)
-
-For more complex conditions — mixing AND/OR with explicit grouping — use inline `logic` and `block` tokens directly in the `if` array. This replaces the `logic` field on the check object (which only supports pure AND or pure OR).
+An array of tokens that form a boolean expression. The check only runs when the expression evaluates to `true`. Each condition token has the same `path` + `values` structure as the check itself.
 
 **Token types:**
 
@@ -322,13 +270,36 @@ For more complex conditions — mixing AND/OR with explicit grouping — use inl
 | Operator  | `{ "logic": "and" }` / `{ "logic": "or" }`    | Binary logic operator between conditions         |
 | Block     | `{ "block": "start" }` / `{ "block": "end" }` | Grouping markers (parentheses)                   |
 
-**Inline OR** (same as the `logic: "or"` example above, but inline):
+**AND:** all conditions must be satisfied:
+
+```json
+"if": [
+  { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
+  { "logic": "and" },
+  { "path": "records[0].published", "values": [{ "type": "boolean", "value": true }] }
+]
+```
+
+The check runs only if `verified` is `true` **AND** `published` is `true`.
+
+**OR:** at least one condition must be satisfied:
 
 ```json
 "if": [
   { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
   { "logic": "or" },
   { "path": "records[0].approved", "values": [{ "type": "boolean", "value": true }] }
+]
+```
+
+The check runs if `verified` is `true` **OR** `approved` is `true`.
+
+**Implicit AND:** two conditions adjacent without an operator default to AND:
+
+```json
+"if": [
+  { "path": "records[0].verified", "values": [{ "type": "boolean", "value": true }] },
+  { "path": "records[0].published", "values": [{ "type": "boolean", "value": true }] }
 ]
 ```
 
@@ -346,7 +317,7 @@ For more complex conditions — mixing AND/OR with explicit grouping — use inl
 ]
 ```
 
-This expression cannot be expressed with the old `logic` field (which only supports pure AND or pure OR across all conditions).
+This expression cannot be expressed with simple AND or OR alone — block grouping is required for mixed precedence.
 
 **Multi-level nesting** — `A AND (B OR (C AND (D OR E)))`:
 
@@ -378,9 +349,8 @@ Blocks can nest arbitrarily deep. Each `{ "block": "start" }` / `{ "block": "end
 - **Block markers** provide explicit grouping (parentheses). Use them when you need a specific precedence.
 - **Implicit AND**: two conditions adjacent without an operator default to AND.
 - **Short-circuit**: AND stops on the first `false`; OR stops on the first `true`.
-- **Backward compat**: if no `logic`/`block` tokens are present in the `if` array, the old format is used (all conditions with the `logic` field on the check object). Existing configs work unchanged.
 
-If a condition's path doesn't exist in the JSON, that condition is considered **not satisfied**. With AND (default), this causes the check to be skipped. With OR, the check still runs if another condition is satisfied.
+If a condition's path doesn't exist in the JSON, that condition is considered **not satisfied**. With AND, this causes the check to be skipped. With OR, the check still runs if another condition is satisfied.
 
 ### for (loop expansion)
 
@@ -440,7 +410,7 @@ For a given `path`, the rule checks the value against all entries in the `values
 - If **none** match → reports `valueNotMatch`.
 - If the **path doesn't exist** → reports `pathNotExists` (the `values` array is not checked).
 
-When `if` conditions are present, the check only runs if the conditions are satisfied according to `logic`: `"and"` (default) requires all conditions to pass; `"or"` requires at least one. If the conditions are not met, the entire check is skipped (no error reported).
+When `if` conditions are present, the check only runs if the boolean expression evaluates to `true`. Use inline `{ "logic": "and"/"or" }` tokens to combine conditions; without any operator tokens, conditions default to AND. If the conditions are not met, the entire check is skipped (no error reported).
 
 ## Examples
 
@@ -499,16 +469,10 @@ Require `status` to be `"active"` when `verified` **or** `approved` is `true`:
   "path": "status",
   "values": [{ "type": "string", "value": "^active$" }],
   "if": [
-    {
-      "path": "verified",
-      "values": [{ "type": "boolean", "value": true }]
-    },
-    {
-      "path": "approved",
-      "values": [{ "type": "boolean", "value": true }]
-    }
-  ],
-  "logic": "or"
+    { "path": "verified", "values": [{ "type": "boolean", "value": true }] },
+    { "logic": "or" },
+    { "path": "approved", "values": [{ "type": "boolean", "value": true }] }
+  ]
 }
 ```
 
