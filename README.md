@@ -248,10 +248,10 @@ An array of value matchers. The value at `path` must match **at least one** matc
 | Field        | Required | Description                                                               |
 | ------------ | -------- | ------------------------------------------------------------------------- |
 | `type`       | Yes      | One of `"string"`, `"number"`, `"boolean"`, `"null"`, `"undefined"`.      |
-| `value`      | No*      | The pattern or literal to match against. See [Value Types](#value-types). |
+| `value`      | No\*     | The pattern or literal to match against. See [Value Types](#value-types). |
 | `ignoreCase` | No       | If `true`, regex matching is case-insensitive. Default `false`.           |
 
-*`value` is ignored for `type: "null"` and `type: "undefined"` (the type itself is the check).
+\*`value` is ignored for `type: "null"` and `type: "undefined"` (the type itself is the check).
 
 If the value at `path` matches none of the matchers, the rule reports:
 
