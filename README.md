@@ -14,7 +14,7 @@ Both rules work on `.json` files. The plugin registers a [processor](https://esl
 - [Installation](#installation)
 - [Quick Start](#quick-start)
   - [ESLint 9+ (flat config)](#eslint-9-flat-config)
-  - [ESLint 8 and below (legacy config)](#eslint-8-and-below-legacy-config)
+  - [ESLint 8.x (legacy config)](#eslint-8x-legacy-config)
 - [Rules](#rules)
   - [json-lint](#json-lint)
   - [json-value](#json-value)
@@ -30,6 +30,8 @@ Both rules work on `.json` files. The plugin registers a [processor](https://esl
 - [License](#license)
 
 ## Installation
+
+> **Requirements:** ESLint `>=8.26.0` and Node.js `>=18`. ESLint 9+ uses [flat config](https://eslint.org/docs/latest/use/configure/configuration-files); ESLint 8.x uses [legacy config](https://eslint.org/docs/v8.x/use/configure/configuration-files) (`.eslintrc`).
 
 You'll first need to install [ESLint](https://eslint.org/).
 
@@ -85,7 +87,7 @@ module.exports = [
 
 > **Note:** In flat config, the `.json` processor is **not** auto-applied. Always spread `flat/recommended` (or wire the processor manually) so that JSON files are parsed before the rules run.
 
-### ESLint 8 and below (legacy config)
+### ESLint 8.x (legacy config)
 
 Add `check-json-value` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix.
 
